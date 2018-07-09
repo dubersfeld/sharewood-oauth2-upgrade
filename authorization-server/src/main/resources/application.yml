@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/sharewoodBootDB"
+    username: tomcatUser
+    password: password1234
+  jpa:
+    hibernate:
+      naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+server:
+  port: 8080
+  servlet:
+    context-path: /authorization
+    
+
+authorization-url: "http://localhost:8080"
+
+login-url: "http://localhost:8080/authorization/login" 
+  
+     
+  
+

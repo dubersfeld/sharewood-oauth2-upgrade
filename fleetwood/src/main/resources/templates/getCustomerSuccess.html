@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+		xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head th:replace="fragments/header::header(title='getCustomerSuccess')">
+</head>
+
+<body>
+
+	<div th:replace="fragments/main::displayPost"></div>
+	
+	<h1 th:text="'Customer found'"></h1><br /><br />
+   
+   <p th:text="${customer.firstName} + ' ' + ${customer.lastName}"></p>
+   
+   
+</body>
+</html>
