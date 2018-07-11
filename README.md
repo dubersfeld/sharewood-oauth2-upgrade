@@ -1,7 +1,7 @@
 # sharewood-oauth2-upgrade
 I present here an upgrade of the previous project https://github.com/dubersfeld/sharewood-boot-oauth2. It uses Spring Boot version 2.0.3. Moreover it is more focused on OAuth2.
 
-Here are the prerequisites for running the complete application:
+Here is the technology stack needed for running the complete application:
 
 Any Linux platform (I use Ubuntu 16.04)
 
@@ -69,6 +69,11 @@ Now the user is presented the authentication page and approval page shown below:
 
 The most tricky part of this project was to force the correct redirection after a successful login to authorization-server. This is achieved by subclassing the bean AuthenticationSuccessHandler and adding a custom RedirectFilter to the Spring Security filter chain in authorization-server.
 
-Another point of interest is the improvement of the display mechanism in client that is now thread safe by adding a synchronized that was missing in the previous project.  
+Another point of interest is the improvement of the display mechanism in client that is now thread safe by adding a synchronized that was missing in the previous project.
+
+For a different implementation using RemoteTokenServices and enabling the helper endpoint /oauth/check_token in authorization-server follow this link:
+
+https://github.com/dubersfeld/sharewood-oauth2-remote
+  
 
 
