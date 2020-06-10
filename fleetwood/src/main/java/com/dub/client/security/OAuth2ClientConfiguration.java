@@ -1,5 +1,6 @@
 package com.dub.client.security;
 
+
 import java.util.Arrays;
 import java.util.Map;
 
@@ -55,6 +56,7 @@ public class OAuth2ClientConfiguration {
 		details.setAccessTokenUri(accessTokenUri);
 		details.setUserAuthorizationUri(userAuthorizationUri);
 		details.setScope(Arrays.asList("READ", "WRITE", "DELETE"));
+		details.setUseCurrentUri(true);
 		return details;
 	}
 

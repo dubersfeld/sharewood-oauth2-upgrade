@@ -72,7 +72,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/login*")
                     	.permitAll()
                     .antMatchers("/login")
-                      	.permitAll()                     
+                      	.permitAll() 
+                    .antMatchers("/api/**")
+                    	.permitAll()
                     .antMatchers("/**")
                     	.authenticated()  
                     .and()
@@ -86,7 +88,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .permitAll()
                     .and().logout()
-                    .logoutUrl("/logout").logoutSuccessUrl("/login?loggedOut")
+                    .logoutUrl("/logout")
                     .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                     .permitAll()
                 .and().sessionManagement()
@@ -98,7 +100,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         
         		.requireCsrfProtectionMatcher((r) -> {
                         String m = r.getMethod();
-                        return !r.getServletPath().startsWith("/oauth/") &&
+                        return !(r.getServletPath().startsWith("/oauth/") || r.getServletPath().startsWith("/api/")) &&
                                 ("POST".equals(m) || "PUT".equals(m) ||
                                         "DELETE".equals(m) || "PATCH".equals(m));
                     });

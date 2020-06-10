@@ -1,5 +1,6 @@
 package com.dub.spring.entities;
 
+
 import javax.persistence.Embeddable;
 
 import org.springframework.security.core.GrantedAuthority;

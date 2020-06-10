@@ -1,6 +1,7 @@
 package com.dub.client.controller;
 
-// command object
+
+//command object
 public class PhotoUpdateForm {
 	private long id;
 	private boolean shared;

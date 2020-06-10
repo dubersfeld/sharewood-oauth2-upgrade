@@ -1,7 +1,7 @@
 package com.dub.client.photos;
 
 
-// POJO
+//POJO
 public class Photo {
 	private long id;
 	private String title;

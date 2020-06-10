@@ -3,11 +3,11 @@ I present here an upgrade of the previous project https://github.com/dubersfeld/
 
 Here is the technology stack needed for running the complete application:
 
-Any Linux platform (I use Ubuntu 16.04)
+Any Linux platform (I use Ubuntu 18.04)
 
 MySQL server installed
 
-A recent Apache Maven version installed (I used 3.3.9)
+A recent Apache Maven version installed (I used 3.6.0)
 
 In addition I used Spring Tool Suite for developing this demo but it is not required for running the application.
 
@@ -27,7 +27,7 @@ Here are the steps to run the application.
 
 In MySQL client run the command:
 ```
-SOURCE sharewoodBootDBToken.sql
+SOURCE sharewoodBootDB.sql
 ```
 
 This creates a unique database named sharewoodBootDB.
@@ -71,9 +71,11 @@ The most tricky part of this project was to force the correct redirection after 
 
 Another point of interest is the improvement of the display mechanism in client that is now thread safe by adding a synchronized that was missing in the previous project.
 
+For a video demo of this project follow this link:
+
+https://youtu.be/BTlfBYl4358
+
 For a different implementation using RemoteTokenServices and enabling the helper endpoint /oauth/check_token in authorization-server follow this link:
 
 https://github.com/dubersfeld/sharewood-oauth2-remote
   
-
-

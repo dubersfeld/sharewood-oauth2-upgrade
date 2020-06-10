@@ -35,7 +35,7 @@ import com.dub.spring.entities.Photo;
 import com.dub.spring.exceptions.NoUploadFileException;
 import com.dub.spring.exceptions.PhotoNotFoundException;
 import com.dub.spring.exceptions.UnauthorizedException;
-import com.dub.spring.services.PhotoServices;
+import com.dub.spring.services.PhotoService;
 
 @RestController
 @RequestMapping("/api/photos")
@@ -45,7 +45,7 @@ public class PhotoRestEndpoint {
 		= LoggerFactory.getLogger(PhotoRestEndpoint.class);	
 	
 	@Autowired
-	private PhotoServices photoServices;
+	private PhotoService photoServices;
 
 	@RequestMapping(
 			value ="/photosMy",
@@ -151,6 +151,7 @@ public class PhotoRestEndpoint {
 	           @RequestParam("uploadedFile") MultipartFile uploadedFileRef, 
 	           @RequestParam("title") String title,
 	           @RequestParam("shared") boolean shared, HttpServletRequest request) {
+		
 		
 		if (this.getPrincipal() != null) {
 			String username = this.getPrincipal().getUsername();

@@ -16,5 +16,18 @@ public class DefaultController {
     	return modelAndView;
     }
     
-
+/*
+    @GetMapping("/logout")
+    public String logout(ModelAndView modelAndView) {
+    	
+    	
+    	return "login";
+    }
+    	
+    @GetMapping("/basiclogout")
+	public String blogout() {
+    
+	    	return "login";
+	    }
+*/
 }

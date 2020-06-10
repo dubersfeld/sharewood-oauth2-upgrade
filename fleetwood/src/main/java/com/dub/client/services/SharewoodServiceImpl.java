@@ -1,5 +1,6 @@
 package com.dub.client.services;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +42,10 @@ import com.dub.client.photos.Photo;
 import com.dub.client.photos.PhotoWebServiceList;
 
 @Service
-public class SharewoodServicesImpl implements SharewoodServices {
+public class SharewoodServiceImpl implements SharewoodService {
 
 	private static final Logger logger 
-				= LoggerFactory.getLogger(SharewoodServices.class);	
+				= LoggerFactory.getLogger(SharewoodServiceImpl.class);	
 	
 	private String sharewoodPhotoListURL;
 	private String sharewoodPhotoURLPattern;
@@ -212,7 +213,8 @@ public class SharewoodServicesImpl implements SharewoodServices {
 			
 		// first store uploaded file to temporary location 
         tempFile = uploadPhoto(uploadedFileRef);
-		    	
+        
+    	    	
     	MultiValueMap<String, Object> map 
 						= new LinkedMultiValueMap<>();
     	map.add("uploadedFile", new FileSystemResource(tempFile));
@@ -230,6 +232,8 @@ public class SharewoodServicesImpl implements SharewoodServices {
     
  		String url = sharewoodPhotoBaseURL + "/createPhoto";
  		    
+ 		
+ 		
  		try {
  			ResponseEntity<String> response = sharewoodRestTemplate.exchange(
                 url, HttpMethod.POST, requestEntity, String.class);
@@ -284,10 +288,7 @@ public class SharewoodServicesImpl implements SharewoodServices {
 		HttpEntity<Photo> request = new HttpEntity<>(photo, headers);
 			
 		try {
-			ResponseEntity<String> response 
-									= sharewoodRestTemplate.exchange(
-                url, HttpMethod.PUT, request, String.class);
-	  
+			sharewoodRestTemplate.exchange(url, HttpMethod.PUT, request, String.class);
 		} catch (HttpStatusCodeException e) {
 			logger.debug("exception caught " + e);
 			String message;	
@@ -321,12 +322,14 @@ public class SharewoodServicesImpl implements SharewoodServices {
 		/**
 		 * Helper method for photo upload using MultipartFile 
 		 */
+
 		
 		if (uploadedFileRef.isEmpty()) {
 			logger.debug("throwing NoUploadFileException");
 			throw new NoUploadFileException();
 		}
 	
+		
 		String fileName = uploadedFileRef.getOriginalFilename(); 
     	String path = tempDir + fileName; 
     	File outputFile = new File(path);

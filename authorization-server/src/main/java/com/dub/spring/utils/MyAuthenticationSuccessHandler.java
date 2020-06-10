@@ -29,7 +29,8 @@ public class MyAuthenticationSuccessHandler
 						HttpServletRequest request, 
 						HttpServletResponse response, 
 						Authentication authentication) throws ServletException, IOException {
-							
+					
+		
 		HttpSession session = request.getSession();
 			
 		String requestURI = (String) session.getAttribute("requestURI");

@@ -21,7 +21,7 @@ create table oauth_client_details (
   client_secret VARCHAR(256),
   scope VARCHAR(256),
   authorized_grant_types VARCHAR(256),
-  web_server_redirect_uri VARCHAR(256),
+  web_server_redirect_uri VARCHAR(512),
   authorities VARCHAR(256),
   access_token_validity INTEGER,
   refresh_token_validity INTEGER,
@@ -88,7 +88,6 @@ CREATE TABLE user_Authority (
 
 
 
-
 INSERT INTO user (username, hashedPassword, accountNonExpired,
                            accountNonLocked, credentialsNonExpired, enabled)
 VALUES ( -- s1a2t3o4r
@@ -150,10 +149,9 @@ INSERT INTO oauth_client_details (
   refresh_token_validity,
   additional_information,
   autoapprove)
-VALUES('Fleetwood', 'SHAREWOOD', '{bcrypt}$2a$10$azPaUMBpKewR9l0BcKUIX.k3/CS3vdbmXG1EoxJfbKpdEdmirle6.', 'READ,WRITE,DELETE', 'authorization_code', null, 'ROLE_CLIENT', '5200', null, '{}', null
+VALUES('Fleetwood', 'SHAREWOOD', '{bcrypt}$2a$10$azPaUMBpKewR9l0BcKUIX.k3/CS3vdbmXG1EoxJfbKpdEdmirle6.', 'READ,WRITE,DELETE', 'authorization_code', 'http://localhost:9090/fleetwood/sharewood/photosMy,http://localhost:9090/fleetwood/sharewood/updatePhoto,http://localhost:9090/fleetwood/sharewood/createPhotoMulti,http://localhost:9090/fleetwood/sharewood/sharedPhotos,http://localhost:9090/fleetwood/sharewood/deletePhoto', 'ROLE_CLIENT', '5200', null, '{}', null
 
 );
-
 
 
 

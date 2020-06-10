@@ -1,6 +1,5 @@
 package com.dub.spring.controller;
 
-
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.dub.spring.entities.MyUser;
 import com.dub.spring.entities.UserAuthority;
-
 
 public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneable {
 
@@ -63,7 +61,7 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
 	public UserPrincipal(MyUser user) {		
 		this.username = user.getUsername();
 		this.hashedPassword = user.getHashedPassword()
-										.substring(0, 68).getBytes();
+				.substring(0, 68).getBytes();	
 		this.enabled = user.isEnabled();
 		this.authorities = user.getAuthorities();
 		this.credentialsNonExpired = user.isCredentialsNonExpired();

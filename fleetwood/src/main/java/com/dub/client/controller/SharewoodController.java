@@ -1,5 +1,6 @@
 package com.dub.client.controller;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -36,7 +37,7 @@ import com.dub.client.exceptions.PhotoUploadException;
 import com.dub.client.exceptions.SharewoodException;
 import com.dub.client.exceptions.UserDeniedAuthorizationException;
 import com.dub.client.photos.Photo;
-import com.dub.client.services.SharewoodServices;
+import com.dub.client.services.SharewoodService;
 
 
 @Controller
@@ -63,10 +64,6 @@ public class SharewoodController {
 	private static final String DELETE_PHOTO = "deletePhoto";
 	private static final String DELETE_PHOTO_SUCCESS = "deletePhotoSuccess";
 	private static final String DELETE_PHOTO_FAILURE = "deletePhotoFailure";
-
-
-
-	
 	
 	private static final Logger logger = LoggerFactory.getLogger(SharewoodController.class);	
 	
@@ -77,12 +74,13 @@ public class SharewoodController {
 
 	
 	@Autowired
-	private SharewoodServices sharewoodServices;
+	private SharewoodService sharewoodService;
 
 	@RequestMapping("/sharewood/getToken")
 	public String getToken() {
 	
 		OAuth2AccessToken token = sharewoodRestTemplate.getAccessToken();	
+		
 		return INDEX;
 	}
 	
@@ -102,7 +100,7 @@ public class SharewoodController {
 		try {
 			
 			List<Photo> list 
-						= sharewoodServices.getSharewoodPhotosMy();
+						= sharewoodService.getSharewoodPhotosMy();
 					
 			model.addAttribute("photos", list);
 		
@@ -121,7 +119,7 @@ public class SharewoodController {
 		// synchronization needed here for a correct display, otherwise not thread safe
 		synchronized(this) {
 			try {
-				InputStream photo = sharewoodServices.loadSharewoodPhoto(id);
+				InputStream photo = sharewoodService.loadSharewoodPhoto(id);
 		
 				if (photo == null) {			
 					return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
@@ -150,7 +148,7 @@ public class SharewoodController {
 	public String sharedPhotos(Model model) throws Exception {	
 		try {
 			
-			List<Photo> list = sharewoodServices.getSharewoodSharedPhotos();
+			List<Photo> list = sharewoodService.getSharewoodSharedPhotos();
 			
 			model.addAttribute("photos", list);
 			
@@ -201,14 +199,17 @@ public class SharewoodController {
 			return CREATE_PHOTO_MULTIPART;
 		}
 			
+	
 		// Get name of uploaded file.
 		MultipartFile uploadedFileRef = null;
 		boolean shared = form.isShared();
 		String title = form.getTitle();
 		uploadedFileRef = form.getUploadedFile();
 			
+
+		
 		try {
-			Optional<Long> photoId = sharewoodServices.createPhoto(uploadedFileRef, title, shared);
+			Optional<Long> photoId = sharewoodService.createPhoto(uploadedFileRef, title, shared);
 
 			if (photoId.isPresent()) {		
 				model.addAttribute("photoId", photoId.get());
@@ -274,7 +275,7 @@ public class SharewoodController {
 	
 		try { 
 					
-			Photo photo = sharewoodServices.getSharewoodPhoto(form.getId());				
+			Photo photo = sharewoodService.getSharewoodPhoto(form.getId());				
 				model.addAttribute("photo", photo);
 				return UPDATE_PHOTO2;
 		} catch (InsufficientScopeException e) {
@@ -312,7 +313,7 @@ public class SharewoodController {
 			photo.setTitle(form.getTitle());
 			photo.setShared(form.isShared());
 			
-			sharewoodServices.updatePhoto(photo);			
+			sharewoodService.updatePhoto(photo);			
 			return UPDATE_PHOTO_SUCCESS;
 		} catch (Exception e) {
 			model.addAttribute("cause", "Unknow error");
@@ -358,7 +359,7 @@ public class SharewoodController {
 		}
 		
 		try {
-			sharewoodServices.deletePhoto(form.getId());
+			sharewoodService.deletePhoto(form.getId());
 			return DELETE_PHOTO_SUCCESS;
 		} catch (InsufficientScopeException e) {
 			logger.debug("InsufficientScopeException caught");

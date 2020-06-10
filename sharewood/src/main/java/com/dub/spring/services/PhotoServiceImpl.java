@@ -1,5 +1,6 @@
 package com.dub.spring.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,10 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,61 +26,26 @@ import com.dub.spring.exceptions.UnauthorizedException;
 import com.dub.spring.repositories.PhotoRepository;
 
 @Service
-public class PhotoServicesImpl implements PhotoServices {
+public class PhotoServiceImpl implements PhotoService {
 	
-	private static final Logger logger 
-			= LoggerFactory.getLogger(PhotoServicesImpl.class);
-
-	@Value("${photos.baseDirPath}")	
-	private String baseDirPath;
-
+	@Value("${baseDirPath}")
+	String baseDirPath;
+		
 	@Autowired 
 	private PhotoRepository photoRepository;
 
-
 	@Override
 	public List<Photo> getPhotosForCurrentUser(String username) {
-		return photoRepository.findPhotosByUsername(username);
+		List<Photo> photos = photoRepository.findPhotosByUsername(username);
+		return photos;
 	}
-
-
-	private void deletePhoto(long id) throws IOException {
-		// delete row in database
-		String filename = "photo" + id + ".jpg";
-		
-		try {
-			photoRepository.deleteById(id);
-			// delete actual photo file			
-			Path path = FileSystems.getDefault().getPath(baseDirPath, filename);
-	
-			Files.deleteIfExists(path);
-		} catch (EmptyResultDataAccessException e) {
-			throw new PhotoNotFoundException();
-		} 
-		
-	}
-
 
 	@Override
-	public void deletePhoto(long id, String username) throws IOException {
-		Optional<Photo> photo = photoRepository.findById(id);
-		if (!photo.isPresent()) {
-			throw new PhotoNotFoundException();
-		} else {// photo is present
-		
-			String user;
-		
-			user = photo.get().getUsername();	
-		
-			if (!user.equals(username)) {
-				logger.debug("throwing UnauthorizedException");
-				throw new UnauthorizedException();
-			}
-		
-			deletePhoto(id);
-		}
+	public List<Photo> getSharedPhotos() {
+		List<Photo> photos = photoRepository.findPhotosByShared(true);
+		return photos;
 	}
-	
+
 
 	@Override
 	public long createPhoto(
@@ -101,7 +64,7 @@ public class PhotoServicesImpl implements PhotoServices {
 		String path = baseDirPath + fileName;
 	
 		if (uploadedFileRef.getSize() == 0) {
-			logger.debug("throwing NoUploadFileException");
+			//logger.debug("throwing NoUploadFileException");
 			throw new NoUploadFileException();
 		}
 	
@@ -115,7 +78,7 @@ public class PhotoServicesImpl implements PhotoServices {
 		os.close();
 		
 		if (totalBytes != uploadedFileRef.getSize()) {
-			logger.debug("throwing");
+			//logger.debug("throwing");
 			throw new PhotoUploadException();
 		} else {
 			// now update database
@@ -136,40 +99,68 @@ public class PhotoServicesImpl implements PhotoServices {
 	}
 
 
-	public String getBaseDirPath() {
-		return baseDirPath;
-	}
-
-	public void setBaseDirPath(String baseDirPath) {
-		this.baseDirPath = baseDirPath;
-	}
-
-	@Override
-	public List<Photo> getSharedPhotos() {
-		return photoRepository.findPhotosByShared(true);
-	}
-
-
 	@Override
 	public Photo getPhoto(long id, String username) {
-	
+		
 		Optional<Photo> photo = photoRepository.findById(id);// may be null	
-	
+		
 		if (!photo.isPresent()) {
 			throw new PhotoNotFoundException();
 		} else {
 		
-			try {
-				if ( username.equals(photo.get().getUsername()) ) {
+			if ( username.equals(photo.get().getUsername()) ) {
 					return photo.get();
-			} 	else {
-					logger.debug("throwing UnauthorizedException");
-					throw new UnauthorizedException();
-				}
-			} catch (PhotoNotFoundException e) {
-				throw e;
-			}	
+			} else {
+				throw new UnauthorizedException();
+			}
 		}
+	}
+
+	@Override
+	public void updatePhoto(Photo photo, String username) {
+		if (!username.equals(photo.getUsername())) {
+			throw new UnauthorizedException();
+		}
+		photoRepository.save(photo);
+		
+	}
+
+	private void deletePhoto(long id) throws IOException {
+		// delete row in database
+		String filename = "photo" + id + ".jpg";
+				
+		try {
+			photoRepository.deleteById(id);
+			// delete actual photo file			
+			Path path = FileSystems.getDefault().getPath(baseDirPath, filename);
+			
+			Files.deleteIfExists(path);
+		} catch (EmptyResultDataAccessException e) {
+			throw new PhotoNotFoundException();
+		} 
+		
+	}
+
+	@Override
+	public void deletePhoto(long id, String username) throws Exception {
+		
+		Optional<Photo> photo = photoRepository.findById(id);
+		if (!photo.isPresent()) {
+			throw new PhotoNotFoundException();
+		} else {// photo is present
+		
+			String user;
+		
+			user = photo.get().getUsername();	
+		
+			if (!user.equals(username)) {
+				//logger.debug("throwing UnauthorizedException");
+				throw new UnauthorizedException();
+			}
+		
+			deletePhoto(id);
+		}
+		
 	}
 
 
@@ -190,15 +181,6 @@ public class PhotoServicesImpl implements PhotoServices {
 				throw new UnauthorizedException();// caught by RestEndpoint
 			}	
 		}
-	}
-
-	@Override
-	public void updatePhoto(Photo photo, String username) {
-	
-		if (!username.equals(photo.getUsername())) {
-			throw new UnauthorizedException();
-		}
-		photoRepository.save(photo);
 	}
 
 }

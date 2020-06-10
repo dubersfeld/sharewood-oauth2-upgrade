@@ -6,8 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.dub.spring.entities.MyUser;
 
-public interface UserRepository extends CrudRepository<MyUser, Long>
-{
+public interface UserRepository extends CrudRepository<MyUser, Long> {
+
 	MyUser getByUsername(String username);
 	
 	List<MyUser> findAll();

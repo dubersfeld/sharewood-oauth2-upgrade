@@ -15,6 +15,10 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+
+import com.dub.client.services.CustomLogoutHandler;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AdviceMode;
 
 @Configuration
@@ -24,11 +28,14 @@ import org.springframework.context.annotation.AdviceMode;
 )
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		  
+	/*
 	@Bean
 	public DefaultWebSecurityExpressionHandler webSecurityExpressionHandler() {
 	    	return new DefaultWebSecurityExpressionHandler();
 	}
-	
+	*/
+	@Autowired
+	CustomLogoutHandler logoutHandler;
 
 	@Lazy
 	@Bean
@@ -96,7 +103,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .permitAll()
                 .and().logout()
-                    .logoutUrl("/logout")
+                    .logoutUrl("/logout").addLogoutHandler(logoutHandler)
                     .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                     .permitAll()
                 .and().sessionManagement()

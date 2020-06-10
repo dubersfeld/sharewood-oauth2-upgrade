@@ -1,5 +1,6 @@
 package com.dub.spring.security;
 
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,10 @@ public class ResourceServerConfig
 		http.antMatcher("/api/**").authorizeRequests()	
 		.antMatchers(HttpMethod.GET, "/api/testResource")
 		.access("#oauth2.hasScope('READ')")
-			
+				
+		.antMatchers(HttpMethod.GET, "/api/tokens/**")
+		.access("hasAuthority('USER')")
+		
 		.antMatchers(HttpMethod.GET, "/api/photos/**")
 		.access("#oauth2.hasScope('READ') and hasAuthority('USER')")
 		
@@ -54,8 +58,7 @@ public class ResourceServerConfig
 		.access("#oauth2.hasScope('READ') and #oauth2.hasScope('WRITE') and hasAuthority('USER')")
 		
 		.antMatchers(HttpMethod.DELETE, "/api/photos/**")
-		.access("#oauth2.hasScope('READ') and #oauth2.hasScope('DELETE') and hasAuthority('USER')");
-				
+		.access("#oauth2.hasScope('READ') and #oauth2.hasScope('DELETE') and hasAuthority('USER')");				
 	}
 
 

@@ -1,5 +1,6 @@
 package com.dub.client.services;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -13,7 +14,7 @@ import com.dub.client.photos.Photo;
 /**
  * @author Dominique Ubersfeld
  */
-public interface SharewoodServices {
+public interface SharewoodService {
 	
 	List<Photo> getSharewoodPhotosMy() throws SharewoodException;
 	

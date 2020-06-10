@@ -5,6 +5,6 @@ public class PhotoNotFoundException extends RuntimeException {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4633021254116816671L;
 
 }
