@@ -5,7 +5,7 @@ Here is the technology stack needed for running the complete application:
 
 Any Linux platform (I use Ubuntu 18.04)
 
-MySQL server installed
+MySQL server installed (I use version 8.0.20)
 
 A recent Apache Maven version installed (I used 3.6.0)
 
