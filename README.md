@@ -73,7 +73,7 @@ Another point of interest is the improvement of the display mechanism in client 
 
 For a video demo of this project follow this link:
 
-https://youtu.be/BTlfBYl4358
+https://youtu.be/BTlfbYl4358
 
 For a different implementation using RemoteTokenServices and enabling the helper endpoint /oauth/check_token in authorization-server follow this link:
 
